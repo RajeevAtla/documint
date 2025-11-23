@@ -1,47 +1,39 @@
 name: CI
 
 on:
+  workflow_dispatch:
   push:
-    branches: [main, master]
+    branches:
+      - main
   pull_request:
-    branches: [main, master]
 
 jobs:
-  build:
+  ci:
     runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        python-version: ["3.11", "3.12", "3.13"]
+    env:
+      FORCE_COLOR: "1"
+      GITHUB_ACTIONS: "true"
+      CLICOLOR_FORCE: "1"
 
     steps:
-      - name: Checkout repository
+      - name: Check out repository
         uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
+      - name: Set up uv
+        uses: astral-sh/setup-uv@v7
         with:
-          python-version: ${{ matrix.python-version }}
+          python-version: "3.13"
+          activate-environment: "true"
+          enable-cache: "true"
+          restore-cache: "true"
+          save-cache: "true"
+          cache-python: "true"
 
-      - name: Install uv
-        uses: astral-sh/uv-action@v1
+      - name: Sync dependencies
+        run: uv sync --dev
 
-      - name: Cache uv
-        uses: actions/cache@v4
-        with:
-          path: ~/.cache/uv
-          key: ${{ runner.os }}-uv-${{ matrix.python-version }}-${{ hashFiles('**/uv.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-uv-${{ matrix.python-version }}-
-            ${{ runner.os }}-uv-
+      - name: Run Ruff
+        run: uv run ruff check
 
-      - name: Install dependencies
-        run: uv sync
-
-      - name: Lint with ruff
-        run: uv run ruff check src/ tests/
-
-      - name: Run tests
-        env:
-          GEMINI_API_KEY: "dummy"
-        run: uv run pytest
+      - name: Run Pytest
+        run: uv run pytest --cov=src
