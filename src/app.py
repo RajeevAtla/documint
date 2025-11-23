@@ -4,8 +4,8 @@ from typing import Tuple
 
 import gradio as gr
 
-from .agents.workflow import build_workflow
-from .utils.logger import get_logger
+from src.agents.workflow import build_workflow
+from src.utils.logger import get_logger
 
 logger = get_logger(__name__)
 
