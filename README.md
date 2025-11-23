@@ -61,6 +61,5 @@ uv run pytest
 
 Format code:
 ```bash
-uv run black src/
 uv run ruff check src/
 ```
