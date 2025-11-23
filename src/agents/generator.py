@@ -1,6 +1,6 @@
 """Generate modernized markdown documentation."""
 
-from typing import Dict, Any, List
+from typing import Dict, Any
 
 from langchain_anthropic import ChatAnthropic
 from langchain_core.messages import HumanMessage, SystemMessage
@@ -78,7 +78,7 @@ def _create_generation_prompt(state: Dict[str, Any]) -> str:
         "- Include cross-references where relevant.\n\n"
         f"Original Documentation (truncated):\n{original_snippet}\n\n"
         f"Issues Identified:\n" + "\n".join(analysis_lines) + "\n\n"
-        f"Research Findings:\n" + "\n".join(research_lines)
+        "Research Findings:\n" + "\n".join(research_lines)
     )
 
 

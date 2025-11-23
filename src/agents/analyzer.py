@@ -1,8 +1,6 @@
 """Analyze documentation content for outdated information."""
 
-import json
-import re
-from typing import Dict, Any, List
+from typing import Dict, Any
 
 from langchain_anthropic import ChatAnthropic
 from langchain_core.messages import HumanMessage, SystemMessage
