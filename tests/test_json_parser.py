@@ -1,4 +1,3 @@
-import pytest
 
 from src.utils.json_parser import extract_json_from_response, safe_json_parse
 

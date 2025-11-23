@@ -1,6 +1,6 @@
 """State schema for LangGraph workflow."""
 
-from typing import TypedDict, List, Dict, Any, Optional
+from typing import Annotated, Any, Dict, List, Optional, TypedDict
 
 from langgraph.graph import add_messages
 
@@ -28,8 +28,5 @@ class DocumentState(TypedDict):
     research_results: List[Dict[str, Any]]
     modernized_markdown: str
     quality_report: Dict[str, Any]
-    messages: List[Any]
+    messages: Annotated[List[Any], add_messages]
     error: Optional[str]
-
-
-DocumentState.__annotations__["messages"] = add_messages(list)

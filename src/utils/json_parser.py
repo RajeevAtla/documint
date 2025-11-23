@@ -24,9 +24,16 @@ def extract_json_from_response(response: str) -> Optional[Any]:
     if not response:
         return None
 
+    candidates = []
+
     # Prefer fenced code blocks labeled as json
-    fenced = re.findall(r"```(?:json)?\\s*(\\{.*?\\}|\\[.*?\\])\\s*```", response, re.DOTALL)
-    candidates = fenced or re.findall(r"(\\{.*\\}|\\[.*\\])", response, re.DOTALL)
+    fenced_pattern = re.compile(r"```(?:json)?\s*(\{.*?\}|\[.*?\])\s*```", re.DOTALL | re.IGNORECASE)
+    candidates.extend([match.strip() for match in fenced_pattern.findall(response)])
+
+    # Inline JSON objects or arrays
+    inline_pattern = re.compile(r"(\{.*?\}|\[.*?\])", re.DOTALL)
+    if not candidates:
+        candidates.extend([match.strip() for match in inline_pattern.findall(response)])
 
     for candidate in candidates:
         cleaned = candidate.strip()
