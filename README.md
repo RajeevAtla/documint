@@ -26,7 +26,7 @@ An AI-powered system that modernizes technical documentation using LangGraph age
 3. Configure environment:
    ```bash
    cp .env.example .env
-   # Add your ANTHROPIC_API_KEY to .env
+   # Add your GEMINI_API_KEY to .env
    ```
 
 4. Run the application:

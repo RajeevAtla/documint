@@ -2,10 +2,10 @@
 
 from typing import Dict, Any
 
-from langchain_anthropic import ChatAnthropic
+from langchain_openai import ChatOpenAI
 from langchain_core.messages import HumanMessage, SystemMessage
 
-from ..config import get_model_name
+from ..config import get_model_name, get_gemini_api_key
 from ..utils.json_parser import extract_json_from_response
 from ..utils.logger import get_logger
 
@@ -26,7 +26,11 @@ def analyze_content(state: Dict[str, Any]) -> Dict[str, Any]:
     truncated = content[:8000]
 
     try:
-        llm = ChatAnthropic(model=get_model_name())
+        llm = ChatOpenAI(
+            model=get_model_name(),
+            api_key=get_gemini_api_key(),
+            base_url="https://generativelanguage.googleapis.com/v1beta/openai/",
+        )
 
         prompt = _create_analysis_prompt(truncated)
         messages = [

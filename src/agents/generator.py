@@ -2,10 +2,10 @@
 
 from typing import Dict, Any
 
-from langchain_anthropic import ChatAnthropic
+from langchain_openai import ChatOpenAI
 from langchain_core.messages import HumanMessage, SystemMessage
 
-from ..config import get_model_name
+from ..config import get_model_name, get_gemini_api_key
 from ..utils.logger import get_logger
 
 logger = get_logger(__name__)
@@ -22,7 +22,11 @@ def generate_modernized_docs(state: Dict[str, Any]) -> Dict[str, Any]:
         dict: Updated state with 'modernized_markdown' populated
     """
     try:
-        llm = ChatAnthropic(model=get_model_name())
+        llm = ChatOpenAI(
+            model=get_model_name(),
+            api_key=get_gemini_api_key(),
+            base_url="https://generativelanguage.googleapis.com/v1beta/openai/",
+        )
         prompt = _create_generation_prompt(state)
         messages = [
             SystemMessage(content="You are an expert technical writer producing clean, modern markdown."),

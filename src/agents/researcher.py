@@ -3,10 +3,10 @@
 from datetime import datetime
 from typing import Dict, Any, List
 
-from langchain_anthropic import ChatAnthropic
+from langchain_openai import ChatOpenAI
 from langchain_core.messages import HumanMessage
 
-from ..config import get_model_name
+from ..config import get_model_name, get_gemini_api_key
 from ..utils.logger import get_logger
 
 logger = get_logger(__name__)
@@ -27,7 +27,11 @@ def research_best_practices(state: Dict[str, Any]) -> Dict[str, Any]:
     results: List[Dict[str, Any]] = []
 
     try:
-        llm = ChatAnthropic(model=get_model_name())
+        llm = ChatOpenAI(
+            model=get_model_name(),
+            api_key=get_gemini_api_key(),
+            base_url="https://generativelanguage.googleapis.com/v1beta/openai/",
+        )
     except Exception as exc:
         logger.error("Failed to initialize LLM for research: %s", exc, exc_info=True)
         return {"research_results": []}
